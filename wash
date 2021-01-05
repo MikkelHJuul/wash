@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail; shopt -s nullglob
+
+calling_script="$1"
+
+function available_methods() {
+    sed -n "s/^function _\(.*\)().*/\1/p" < "$1"
+}
+
+methods=("$(available_methods $calling_script)")
+
+function is_available() {
+   [[ "$1" =~ (^|[[:space:]])"${2:-}"($|[[:space:]]) ]] && return 0 || return 1
+}
+
+if [[ $# -gt 1 ]]; then
+   # If the current pointer ($1) is a valid command (is an exported method from the source) or if it's the last variable (catch help and non-exported names)
+  while ! $(is_available "$methods" "$1") && [[ "${2-}" ]] ; do
+    # properties start with at least one dash
+    if [ "${1:0:1}" == '-' ]; then
+      OPTION="${1:1}"
+      # but it may be two
+      if [ "${OPTION:0:1}" == '-' ]; then
+        OPTION="${OPTION:1}"
+      fi
+      #convert to snake_case
+      OPTION=${OPTION//-/_}
+      #handle single variable e.g. -something=other
+      if [[ $OPTION =~ = ]]; then
+        OPTION_KEY=${OPTION/=*/}
+	#declare as screaming snake case with prefixed underscore
+        declare "_${OPTION_KEY^^}=${OPTION/*=/}"
+      else
+	#declare fallback screaming snake case and the next variable is the value..
+	#flags will simply have the value of the next variable/or the command
+        declare "_${OPTION^^}=${2}"
+      fi
+    fi
+    shift
+  done
+fi
+
+# this is the method to print help-message from the given file (and this method) prints the content following the syntax below.
+# will replace indices of _PROGRAM with the programs actual name
+function _help() {  #HELP display this message:\n_PROGRAM help
+    program_name=${1##*/}
+    sed -n "s/^.*#HELP\\s//p;" < "$1" | sed "s/\\\\n/\n\t/g;s/$/\n/;s/_PROGRAM/$program_name/g"
+    sed -n "s/^.*#HELP\\s//p;" < "$2" | sed "s/\\\\n/\n\t/g;s/$/\n/;s/_PROGRAM/$program_name/g"
+}
+
+#Sources the given script and calls the metod referenced if it's exported, else _help
+source "$calling_script"
+if $(is_available "$methods" "${1:-NoT#AMethod}"); then
+    _"$1" "${@:2}"
+else
+    _help "$calling_script" "$0"
+fi
