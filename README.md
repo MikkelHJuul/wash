@@ -52,6 +52,32 @@ some_value, john, Ellis, my_func
 Hello Lilly and others
 ```
 
+## Installation
+it's a `bash` script; install the script `wash` in an executable file named `wash` on your `PATH`. This enables calling `wash` from anywhere, and the shebang syntax (`#!/usr/bin/env wash`).
+
+##### install via curl:
+```bash
+curl https://raw.githubusercontent.com/MikkelHJuul/wash/main/wash > /usr/bin/wash
+chmod +x /usr/bin/wash
+```
+
+##### install via docker
+```bash
+docker run --rm -d --name wash mjuul/wash tail -f /dev/null
+docker cp wash:/usr/bin/wash /usr/bin/wash
+docker stop wash
+chmod +x /usr/bin/wash
+```
+
+##### install in docker image
+```Dockerfile
+...
+COPY --from=mjuul/wash /usr/bin/wash /usr/bin/wash
+...
+```
+
+### Prerequisites
+Bash 4
 
 ## Licence notice
 This project is not my invention, I generalised the concepts, and great work of [p8952/bocker](https://github.com/p8952/bocker).
