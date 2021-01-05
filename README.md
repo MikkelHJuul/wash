@@ -1,11 +1,11 @@
-# WASH - Wrapper for BASH
+# WASH - Wrapper for bASH
 or "`wash` away your boilerplate"
 
 `wash` is a `bash` script that you can call with a file (or from your file via shebang). `wash` handles command invocation, variables and help-messages.
 
 ## Usage
 ### Exporting your method
-it's use is fairly simple, given a bash script, any `function` starting with `_` is exported and callable in the reference of `wash` ie.:
+its use is fairly simple, given a bash script, any `function` starting with `_` is exported and callable in the reference of `wash` ie.:
 ```bash
 #!/usr/bin/env wash
 
