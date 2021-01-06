@@ -11,12 +11,30 @@ function available_methods() {
 methods=("$(available_methods $calling_script)")
 
 function is_available() {
-   [[ "$1" =~ (^|[[:space:]])"${2:-}"($|[[:space:]]) ]] && return 0 || return 1
+   [[ "$methods" =~ (^|[[:space:]])"${1:-}"($|[[:space:]]) ]] && return 0 || return 1
 }
+
+# should break when there are no third variable and the first variable is an available method,
+# or both first and second variable does not start with dash
+function should_continue_variables_loop() {
+  if [[ ! "${2-}" ]]; then
+    return 1
+  elif [[ -n "${command-}" ]] && $(is_available "$1") && [[ "${2:0:1}" != '-' ]]; then
+    return 1
+  elif [[ "${1:0:1}" != '-' ]] && [[ "${2:0:1}" != '-' ]]; then
+    return 1
+  fi
+  return 0
+}
+
+if $(is_available "$2"); then
+  command="$2"
+  shift
+fi
 
 if [[ $# -gt 1 ]]; then
    # If the current pointer ($1) is a valid command (is an exported method from the source) or if it's the last variable (catch help and non-exported names)
-  while ! $(is_available "$methods" "$1") && [[ "${2-}" ]] ; do
+  while	should_continue_variables_loop "$@" ; do
     # properties start with at least one dash
     if [ "${1:0:1}" == '-' ]; then
       OPTION="${1:1}"
@@ -31,6 +49,9 @@ if [[ $# -gt 1 ]]; then
         OPTION_KEY=${OPTION/=*/}
 	#declare as screaming snake case with prefixed underscore
         declare "_${OPTION_KEY^^}=${OPTION/*=/}"
+        if [[ "${1:0:1}" == '-' ]] && [[ "$1" =~ '=' ]] && [[ "${2:0:1}" != '-' ]]; then
+          break
+        fi
       else
 	#declare fallback screaming snake case and the next variable is the value..
 	#flags will simply have the value of the next variable/or the command
@@ -49,10 +70,15 @@ function _help() {  #HELP display this message:\n_PROGRAM help
     sed -n "s/^.*#HELP\\s//p;" < "$2" | sed "s/\\\\n/\n\t/g;s/$/\n/;s/_PROGRAM/$program_name/g"
 }
 
+if $(is_available "$2") && [[ -z "${command-}" ]]; then
+  shift
+fi
+
 #Sources the given script and calls the metod referenced if it's exported, else _help
 source "$calling_script"
-if $(is_available "$methods" "${1:-NoT#AMethod}"); then
-    _"$1" "${@:2}"
+command=${command:-$1}
+if $(is_available "${command:-NoT#AMethod}"); then
+    _"$command" "${@:2}"
 else
     _help "$calling_script" "$0"
 fi
