@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail  # add x for trace
+
+
+## TEST 1
+output_hello="$(./test_script hello_world hello)"
+
+test "Hello hello" = "$output_hello"
+
+## TEST 2
+
+output_hello="$(./test_script hello_world Lilly and Ellis)"
+
+test "Hello Lilly and Ellis" = "$output_hello"
+
+## TEST 3
+
+#flag has to be the same position
+output_command_first="$(./test_script hello_with_vars -single-dash hey --flag --double-dash hello you you)"
+output_command_last="$(./test_script -single-dash hey --flag --double-dash hello hello_with_vars you you)"
+
+test "$output_command_first" = "$output_command_last"
+
+output_command_equals="$(./test_script hello_with_vars -single-dash=hey --flag --double-dash hello you you)"
+
+test "$output_command_first" = "$output_command_equals"
+
+output_command_opposite="$(./test_script --single-dash=hey -flag --double-dash hello hello_with_vars you you)"
+
+test "$output_command_first" = "$output_command_opposite"
+
+
+## TEST 4
+# do not format the value!
+
+output_command_value_with_dash="$(./test_script --single-dash=hey -flag='--double-dash' --double-dash hello hello_with_vars you you)"
+
+test "$output_command_first" = "$output_command_opposite"
+
+

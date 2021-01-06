@@ -1,0 +1,14 @@
+#!/usr/bin/env /home/mju/open_source/wash/wash
+
+#HELP prints the first given input:\n_PROGRAM hello_world <name>
+function _hello_world() {
+   echo "Hello $@"
+}
+
+#HELP prints some variables:\n_PROGRAM [-[-]double-dash <val1>|-[-]flag|-[-]single-dash <val2>] hej_med_vars
+function _hello_with_vars() {
+   echo "_DOUBLE_DASH: $_DOUBLE_DASH"
+   echo "_FLAG: $_FLAG"
+   echo "_SINGLE_DASH: $_SINGLE_DASH"
+   echo "arg is: $1 and $2"
+}
