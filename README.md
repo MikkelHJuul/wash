@@ -93,3 +93,5 @@ This is also the reason for this project to license under the GPL v3 license (co
 
 ## TODO
 - tests
+- documentation and test for the extent and consequences of `set -o errexit -o nounset -o pipefail; shopt -s nullglob`
+..decide which of them should stay what are the possibilities etc. Pros and cons
