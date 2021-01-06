@@ -43,16 +43,17 @@ if [[ $# -gt 1 ]]; then
         OPTION="${OPTION:1}"
       fi
       #convert to snake_case
-      OPTION=${OPTION//-/_}
       #handle single variable e.g. -something=other
       if [[ $OPTION =~ = ]]; then
         OPTION_KEY=${OPTION/=*/}
+	OPTION_KEY=${OPTION_KEY//-/_}
 	#declare as screaming snake case with prefixed underscore
         declare "_${OPTION_KEY^^}=${OPTION/*=/}"
         if [[ "${1:0:1}" == '-' ]] && [[ "$1" =~ '=' ]] && [[ "${2:0:1}" != '-' ]]; then
           break
         fi
       else
+        OPTION=${OPTION//-/_}
 	#declare fallback screaming snake case and the next variable is the value..
 	#flags will simply have the value of the next variable/or the command
         declare "_${OPTION^^}=${2}"
