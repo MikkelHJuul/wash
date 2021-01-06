@@ -23,6 +23,13 @@ my_script -my-variable some_value -other-var=john --third-var Ellis --flag my_fu
 will expand variables: `_MY_VARIABLE=some_value, _OTHER_VAR=john, _THIRD_VAR=Ellis, _FLAG=my_func`
 to be freely referenced in you script
 
+The generalised syntax is
+```bash
+script_name [command <properties> | <properties> command] args...
+```
+
+note: flags isn't actually a real thing; if you use the syntax `script_name command <properties>` and want to put a `flag` as the last parameter set it as `-flag=` or it will consume the first argument.
+
 ### adding help messages
 your script has a help method. the help method prints any text from your script following the syntax `#HELP`
 
@@ -33,7 +40,7 @@ to sum it all up; given!
 #HELP my function does almost nothing:\n_PROGRAM -my-variable <value> -other-var=<value> -third-var <value> -flag my_func
 function _my_func() {
    echo "$_MY_VARIABLE, $_OTHER_VAR, $_THIRD_VAR, $_FLAG"
-   echo "Hello $@" # these are all the passed arguments
+   echo "Hello $@"  # these are all the passed arguments
 }
 ```
 will print help message
@@ -54,6 +61,6 @@ Hello Lilly and others
 
 
 ## Licence notice
-This project is not my invention, I generalised the concepts, and great work of [p8952/bocker](https://github.com/p8952/bocker).
-Which is also the reason this project has the GPL v3 license (condition of reuse of intellectual property)
+This project is not my invention, I generalised the concepts and great work of [p8952/bocker](https://github.com/p8952/bocker).
 
+This is also the reason for this project to license under the GPL v3 license (condition of reuse of intellectual property)
