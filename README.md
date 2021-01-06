@@ -64,3 +64,6 @@ Hello Lilly and others
 This project is not my invention, I generalised the concepts and great work of [p8952/bocker](https://github.com/p8952/bocker).
 
 This is also the reason for this project to license under the GPL v3 license (condition of reuse of intellectual property)
+
+## TODO
+- tests
