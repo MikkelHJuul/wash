@@ -59,6 +59,20 @@ some_value, john, Ellis, my_func
 Hello Lilly and others
 ```
 
+### bash settings
+The default best practice (ie. boilerplate) for running scripts are in short `set -euo pipefail`. 
+I originally inherited this setting from `bocker` and I decided in version `0.4` to keep these settings 
+(but to remove `shopt -s nullglob` - `shopt` settings are contestable, but `nullglob` and `failglob` together are the most common duo) 
+you should write bash scripts using settings: `errexit`, `nounset` and `pipefail` always! 
+
+This default can be ~un~set with `set +euo pipefail` in the beginning of your file. or locally if wanted. see the [bash settings test](tests/test_bash_settings).
+
+#### Running with trace
+in version `0.4` I added the feature to run `wash` with trace (`set -o xtrace`), run with the flag `-x`. 
+To do this you have to run with the direct path to wash in your shebang, ie. `#!/usr/bin/wash -x` or insert into you file via: `sed -i "1i \#!$(which wash) -x" my_script`
+
+You can, of course, skip tracing the `wash` wrapping code by simply adding `set -x` at the top of your file, or at a local context.
+
 ## Installation
 it's a `bash` script; install the script `wash` in an executable file named `wash` on your `PATH`. This enables calling `wash` from anywhere, and the shebang syntax (`#!/usr/bin/env wash`).
 
@@ -92,6 +106,3 @@ This project is not my invention, I generalised the concepts and great work of [
 This is also the reason for this project to license under the GPL v3 license (condition of reuse of intellectual property)
 
 ## TODO
-- tests
-- documentation and test for the extent and consequences of `set -o errexit -o nounset -o pipefail; shopt -s nullglob`
-..decide which of them should stay what are the possibilities etc. Pros and cons
