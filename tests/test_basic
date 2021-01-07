@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail  # add x for trace
+set -exuo pipefail
 
 
 ## TEST 1
@@ -42,4 +42,10 @@ output_command_value_with_dash="$(./test_script --single-dash=hey -flag='--doubl
 
 test "$output_command_first" = "$output_command_opposite"
 
+
+## TEST 6
+#bugfixes for 0.5
+
+./test_script hello_vars_no_args -single-dash something --double-dash other-thing --flag
+./test_script hello_vars_no_args -single-dash something -flag --double-dash=other-thing
 

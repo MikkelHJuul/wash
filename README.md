@@ -4,8 +4,9 @@ or "`wash` away your boilerplate"
 `wash` is a `bash` script that you can call with a file (or from your file via shebang). `wash` handles command invocation, variables and help-messages.
 
 ## Usage
+With `wash` the character `_` is a special character variables are expanded to properties that start with `_` and methods are exported when they start with `_`, this is simply a gimmick to make the script work and the properties noticable.
 ### Exporting your method
-its use is fairly simple, given a bash script, any `function` starting with `_` is exported and callable in the reference of `wash` ie.:
+`wash`'s use is fairly simple, given a bash script, any `function` starting with `_` is exported and callable in the reference of `wash` ie.:
 ```bash
 #!/usr/bin/env wash
 
@@ -13,24 +14,25 @@ function _my_func() {
    ... does nothing
 }
 ```
-is a callable script, with `my_script my_func` calling the method `_my_func`.
+is a callable script, with `my_script my_func` calling the method `_my_func` (notice the shebang).
 
-### variables
-The function syntax of your script must give all variables before the command.
+### Variables
+The function syntax of your script must give all variables before the command. Or all variables after the command.
 ```bash
 my_script -my-variable some_value -other-var=john --third-var Ellis --flag my_func
 ```
 will expand variables: `_MY_VARIABLE=some_value, _OTHER_VAR=john, _THIRD_VAR=Ellis, _FLAG=my_func`
-to be freely referenced in you script
+to be freely referenced in you script, as you see the variables are expected to be `kebab-case` and will be expanded to `SCREAMING_SNAKE_CASE` with a prefixed underscore.
 
 The generalised syntax is
 ```bash
 script_name [command <properties> | <properties> command] args...
 ```
 
-note: flags isn't actually a real thing; if you use the syntax `script_name command <properties>` and want to put a `flag` as the last parameter set it as `-flag=` or it will consume the first argument.
+note: flags isn't actually a real thing; if you use the syntax `script_name command <properties> args...` and want to put a `flag` as the last parameter set it as `-flag=` or it will consume the first argument. This is an accepted limitation of the script.
 
-### adding help messages
+version 0.5 further fixes a bug where `--key=value` or `--flag` as the last parameter would fail.
+### Adding help messages
 your script has a help method. the help method prints any text from your script following the syntax `#HELP`
 
 to sum it all up; given!
@@ -105,4 +107,3 @@ This project is not my invention, I generalised the concepts and great work of [
 
 This is also the reason for this project to license under the GPL v3 license (condition of reuse of intellectual property)
 
-## TODO

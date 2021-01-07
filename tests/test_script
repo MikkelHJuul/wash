@@ -1,4 +1,4 @@
-#!/usr/bin/env /home/mju/open_source/wash/wash
+#!/home/mju/open_source/wash/wash -x
 
 #HELP prints the first given input:\n_PROGRAM hello_world <name>
 function _hello_world() {
@@ -17,4 +17,11 @@ function _hello_with_vars() {
 function _unset_nounset_locally() {
   set +u
   echo "$NotThere"
+}
+
+
+function _hello_vars_no_args() {
+   echo "_DOUBLE_DASH: $_DOUBLE_DASH"
+   echo "_FLAG: $_FLAG"
+   echo "_SINGLE_DASH: $_SINGLE_DASH"
 }

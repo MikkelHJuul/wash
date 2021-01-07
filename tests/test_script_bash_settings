@@ -3,7 +3,7 @@ set +euo pipefail
 
 function _pipesucceed() {
   set -e
-  ls nothing 2>- | sort
+  ls nothing 2>&- | sort
 }
 
 function _unset() {
@@ -11,6 +11,6 @@ function _unset() {
 }
 
 function _errsucceed() {
-  ls nothing 2>-
+  ls nothing 2>&-
   echo "hej"
 }

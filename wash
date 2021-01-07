@@ -19,17 +19,21 @@ function is_available() {
    [[ "$methods" =~ (^|[[:space:]])"${1:-}"($|[[:space:]]) ]] && return 0 || return 1
 }
 
-# should break when there are no third variable and the first variable is an available method,
-# or both first and second variable does not start with dash
+# should break when there are no first or second variable and the first variable is an available method,
+# and should continue if either first or second variable starts with dash
 function should_continue_variables_loop() {
-  if [[ ! "${2-}" ]]; then
-    return 1
-  elif [[ -n "${command-}" ]] && $(is_available "$1") && [[ "${2:0:1}" != '-' ]]; then
-    return 1
+  if [[ ! "${1-}" ]]; then
+    return 1  # no
+  elif [[ "${1:0:1}" == '-' ]] || [[ "${2:0:1}" == '-' ]]; then
+    return 0  # yes - may create issues if your args has dash as the first character
   elif [[ "${1:0:1}" != '-' ]] && [[ "${2:0:1}" != '-' ]]; then
-    return 1
+    return 1  # yes - may create issues if your args has dash as the first character
+  elif [[ ! "${2-}" ]]; then
+    return 1  # no
+  elif [[ -n "${command-}" ]] && $(is_available "$1") && [[ "${2:0:1}" != '-' ]]; then
+    return 1  # no
   fi
-  return 0
+  return 0  # yes
 }
 
 if [[ "$2-" ]] && $(is_available "$2"); then
@@ -54,14 +58,14 @@ if [[ $# -gt 1 ]]; then
 	OPTION_KEY=${OPTION_KEY//-/_}
 	#declare as screaming snake case with prefixed underscore
         declare "_${OPTION_KEY^^}=${OPTION/*=/}"
-        if [[ "${1:0:1}" == '-' ]] && [[ "$1" =~ '=' ]] && [[ "${2:0:1}" != '-' ]]; then
+        if [[ ! "${2-}" ]] || ( [[ "${1:0:1}" == '-' ]] && [[ "$1" =~ '=' ]] && [[ "${2:0:1}" != '-' ]] ); then
           break
         fi
       else
         OPTION=${OPTION//-/_}
 	#declare fallback screaming snake case and the next variable is the value..
 	#flags will simply have the value of the next variable/or the command
-        declare "_${OPTION^^}=${2}"
+        declare "_${OPTION^^}=${2-}"
       fi
     fi
     shift
