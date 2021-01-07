@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+wash_location="$(which wash)"
+sed -i "1i \#!$wash_location -x" ./test_script_wash_trace
+
+trace="$(./test_script_wash_trace untrace 2>&1)"
+! [[ "$trace" =~ 'echo hej' ]]
+
+trace="$(./test_script_wash_trace continue_trace 2>&1)"
+[[ "$trace" =~  'echo hej' ]]
+
+sed -i 1d ./test_script_wash_trace

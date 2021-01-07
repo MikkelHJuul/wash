@@ -2,6 +2,11 @@
 
 set -o errexit -o nounset -o pipefail
 
+if [ "$1" = "-x" ]; then
+   set -o xtrace
+   shift
+fi
+
 calling_script="$1"
 
 function available_methods() {

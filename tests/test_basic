@@ -8,12 +8,17 @@ output_hello="$(./test_script hello_world hello)"
 test "Hello hello" = "$output_hello"
 
 ## TEST 2
+output_hello="$(./test_script hello_world)"
+
+test "Hello " = "$output_hello"
+
+## TEST 3
 
 output_hello="$(./test_script hello_world Lilly and Ellis)"
 
 test "Hello Lilly and Ellis" = "$output_hello"
 
-## TEST 3
+## TEST 4
 
 #flag has to be the same position
 output_command_first="$(./test_script hello_with_vars -single-dash hey --flag --double-dash hello you you)"
@@ -30,7 +35,7 @@ output_command_opposite="$(./test_script --single-dash=hey -flag --double-dash h
 test "$output_command_first" = "$output_command_opposite"
 
 
-## TEST 4
+## TEST 5
 # do not format the value!
 
 output_command_value_with_dash="$(./test_script --single-dash=hey -flag='--double-dash' --double-dash hello hello_with_vars you you)"

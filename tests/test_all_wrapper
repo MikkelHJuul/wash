@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#add current wash to front of path
+set -exuo pipefail
+
+
+PATH="$(dirname $(pwd)):$PATH"
+export PATH
+
+./test_basic
+./test_bash_settings
+./test_wash_trace

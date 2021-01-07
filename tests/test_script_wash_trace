@@ -1,0 +1,10 @@
+#!WASH_LOC -x
+
+function _untrace() {
+  set +x
+  echo "hej"
+}
+
+function _continue_trace() {
+  echo "hej"
+}

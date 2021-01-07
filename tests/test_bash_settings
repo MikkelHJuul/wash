@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+./test_script unset_nounset_locally
+
+./test_script_bash_settings unset
+./test_script_bash_settings errsucceed
+./test_script_bash_settings pipesucceed
+

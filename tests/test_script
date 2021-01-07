@@ -12,3 +12,9 @@ function _hello_with_vars() {
    echo "_SINGLE_DASH: $_SINGLE_DASH"
    echo "arg is: $1 and $2"
 }
+
+
+function _unset_nounset_locally() {
+  set +u
+  echo "$NotThere"
+}

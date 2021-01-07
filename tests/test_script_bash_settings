@@ -1,0 +1,16 @@
+#!/usr/bin/env /home/mju/open_source/wash/wash
+set +euo pipefail
+
+function _pipesucceed() {
+  set -e
+  ls nothing 2>- | sort
+}
+
+function _unset() {
+  echo $hey
+}
+
+function _errsucceed() {
+  ls nothing 2>-
+  echo "hej"
+}
