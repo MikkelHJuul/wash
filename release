@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+tag="$1"
+
+git checkout "$tag"
+
+latest=0
+[[ "${2:-not}" = 'latest' ]] && latest=1
+
+docker build -t mjuul/wash:"$tag" .
+
+#run on a logged in device
+docker push mjuul/wash:"$tag"
+
+if (("$latest")); then
+   docker tag mjuul/wash:"$tag" mjuul/wash:latest
+   docker push mjuul/wash:latest
+fi
+
