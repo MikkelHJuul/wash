@@ -27,7 +27,7 @@ function should_continue_variables_loop() {
   return 0
 }
 
-if $(is_available "$2"); then
+if [[ "$2-" ]] && $(is_available "$2"); then
   command="$2"
   shift
 fi
@@ -71,7 +71,7 @@ function _help() {  #HELP display this message:\n_PROGRAM help
     sed -n "s/^.*#HELP\\s//p;" < "$2" | sed "s/\\\\n/\n\t/g;s/$/\n/;s/_PROGRAM/$program_name/g"
 }
 
-if $(is_available "$2") && [[ -z "${command-}" ]]; then
+if [[ -z "${command-}" ]] && $(is_available "$2"); then
   shift
 fi
 
