@@ -1,24 +1,33 @@
 #!/usr/bin/env bash
-set -exuo pipefail
+set -euo pipefail
 
+n=0
+function test_out() {
+  echo "TEST-$n: $1"
+  n=n+1
+}
 
-## TEST 1
 output_hello="$(./test_script hello_world hello)"
 
 test "Hello hello" = "$output_hello"
 
-## TEST 2
+echo $(test_out "script single arg is fine")
+
+####################################
+
 output_hello="$(./test_script hello_world)"
 
 test "Hello " = "$output_hello"
 
-## TEST 3
+echo $(test_out "script no arg is fine")
 
+#####################################
 output_hello="$(./test_script hello_world Lilly and Ellis)"
 
 test "Hello Lilly and Ellis" = "$output_hello"
 
-## TEST 4
+echo $(test_out "script many args is fine")
+####################################
 
 #flag has to be the same position
 output_command_first="$(./test_script hello_with_vars -single-dash hey --flag --double-dash hello you you)"
@@ -34,18 +43,40 @@ output_command_opposite="$(./test_script --single-dash=hey -flag --double-dash h
 
 test "$output_command_first" = "$output_command_opposite"
 
+echo $(test_out "multi-args multi properties several call options are fine")
+####################################
 
-## TEST 5
-# do not format the value!
 
 output_command_value_with_dash="$(./test_script --single-dash=hey -flag='--double-dash' --double-dash hello hello_with_vars you you)"
 
 test "$output_command_first" = "$output_command_opposite"
 
+echo $(test_out "wash does not format the value of a \"value\"")
+####################################
 
-## TEST 6
 #bugfixes for 0.5
-
 ./test_script hello_vars_no_args -single-dash something --double-dash other-thing --flag
 ./test_script hello_vars_no_args -single-dash something -flag --double-dash=other-thing
 
+echo $(test_out "no-arg calls don't eat properties")
+####################################
+help_output="$(./test_script help)"
+
+[[ "$help_output" =~ "display this message:" ]] || exit 1
+
+[[ "$help_output" =~ "test_script hello_world <name>" ]] || exit 1
+
+echo $(test_out "help prints help message and it contains content from both files")
+
+####################################
+
+also_help_output="$(./test_script)"
+
+test "$help_output" = "$also_help_output"
+
+echo $(test_out "help is displayed when no arguments are given")
+####################################
+
+test "No help here!" = "$(./test_script_override_help)"
+
+echo $(test_out "help method is overriden by method _help in implementing script")

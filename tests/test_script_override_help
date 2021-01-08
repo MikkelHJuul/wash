@@ -1,0 +1,8 @@
+#!/usr/bin/env wash
+
+
+#HELP this help message is not shown
+
+function _help() {
+  echo "No help here!"
+}

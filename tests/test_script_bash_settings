@@ -14,3 +14,4 @@ function _errsucceed() {
   ls nothing 2>&-
   echo "hej"
 }
+

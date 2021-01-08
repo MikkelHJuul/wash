@@ -1,4 +1,4 @@
-#!/home/mju/open_source/wash/wash -x
+#!/usr/bin/env wash
 
 #HELP prints the first given input:\n_PROGRAM hello_world <name>
 function _hello_world() {
@@ -25,3 +25,4 @@ function _hello_vars_no_args() {
    echo "_FLAG: $_FLAG"
    echo "_SINGLE_DASH: $_SINGLE_DASH"
 }
+
