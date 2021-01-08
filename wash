@@ -80,7 +80,7 @@ function _help() {  #HELP display this message:\n_PROGRAM help
     sed -n "s/^.*#HELP\\s//p;" < "$2" | sed "s/\\\\n/\n\t/g;s/$/\n/;s/_PROGRAM/$program_name/g"
 }
 
-if [[ -z "${command-}" ]] && $(is_available "$2"); then
+if [[ -z "${command-}" ]] && $(is_available "${2-}"); then
   shift
 fi
 
