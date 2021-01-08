@@ -36,7 +36,7 @@ function should_continue_variables_loop() {
   return 0  # yes
 }
 
-if [[ "$2-" ]] && $(is_available "$2"); then
+if [[ "${2-}" ]] && $(is_available "$2"); then
   command="$2"
   shift
 fi
