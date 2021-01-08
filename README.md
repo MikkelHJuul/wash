@@ -64,7 +64,9 @@ Hello Lilly and others
 The help message output can be overridden by implementing the method `_help` in your script. 
 
 ### bash settings
-The default best practice (ie. boilerplate) for running scripts are in short `set -euo pipefail`. 
+The default best practice (kinda boilerplate) for running scripts are in short `set -euo pipefail`.
+Your script will have this setting when run with `wash`.
+
 I originally inherited this setting from `bocker` and I decided in version `0.4` to keep these settings 
 (but to remove `shopt -s nullglob` - `shopt` settings are contestable, but `nullglob` and `failglob` together are the most common duo) 
 
