@@ -70,13 +70,13 @@ Your script will have this setting when run with `wash`.
 I originally inherited this setting from `bocker` and I decided in version `0.4` to keep these settings 
 (but to remove `shopt -s nullglob` - `shopt` settings are contestable, but `nullglob` and `failglob` together are the most common duo) 
 
-You should write bash scripts using settings: `errexit`, `nounset` and `pipefail` always! - ie `set -euo pipefiail` or `set -o errexit -o nounset -o pipefail` 
+You should write bash scripts using settings: `errexit`, `nounset` and `pipefail` always! - ie `set -euo pipefail` or `set -o errexit -o nounset -o pipefail` 
 
-This default can be ~un~set with `set +euo pipefail` in the beginning of your file. or locally if wanted. see the [bash settings test](tests/test_bash_settings).
+This default can be *un*set with `set +euo pipefail` in the beginning of your file. or locally if wanted. see the [bash settings test](tests/test_bash_settings).
 
 #### Running with trace
 in version `0.4` I added the feature to run `wash` with trace (`set -o xtrace`), run with the flag `-x`. 
-To do this you have to run with the direct path to wash in your shebang, ie. `#!/usr/bin/wash -x` or insert into you file via: `sed -i "1i \#!$(which wash) -x" my_script`  <sup>try saying `which wash` fast 5 times in a row</sup>
+To do this you have to run with the direct path to wash in your shebang, ie. `#!/usr/bin/wash -x` or insert into you file via: `sed -i "1i \#!$(which wash) -x" my_script` <sup>try saying `which wash` fast 5 times in a row</sup>
 
 If you want trace you can, of course, skip tracing the `wash` wrapping code by simply adding `set -x` at the top of your file, or at a local context.
 
