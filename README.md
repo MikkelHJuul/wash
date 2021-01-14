@@ -21,8 +21,8 @@ The function syntax of your script must give all variables before the command. O
 ```bash
 my_script -my-variable some_value -other-var=john --third-var Ellis --flag my_func
 ```
-will expand variables: `_MY_VARIABLE=some_value, _OTHER_VAR=john, _THIRD_VAR=Ellis, _FLAG=my_func`
-to be freely referenced in you script, as you see the variables are expected to be `kebab-case` and will be expanded to `SCREAMING_SNAKE_CASE` with a prefixed underscore.
+will expand variables: `_my_variable=some_value, _other_var=john, _third_Vvar=Ellis, _flag=my_func`
+to be freely referenced in you script, as you see the variables are expected to be `kebab-case` and will have dashes replaced by `_` with a prefixed underscore.
 
 The generalised syntax is
 ```bash
@@ -41,7 +41,7 @@ to sum it all up; given!
 
 #HELP my function does almost nothing:\n_PROGRAM -my-variable <value> -other-var=<value> -third-var <value> -flag my_func
 function _my_func() {
-   echo "$_MY_VARIABLE, $_OTHER_VAR, $_THIRD_VAR, $_FLAG"
+   echo "$_my_variable, $_other_var, $_third_vat, $_flag"
    echo "Hello $@"  # these are all the passed arguments
 }
 ```
