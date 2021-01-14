@@ -1,22 +1,17 @@
 #!/usr/bin/env bash
 
-set -o errexit -o nounset -o pipefail
-
-if [ "$1" = "-x" ]; then
-   set -o xtrace
-   shift
-fi
+[[ "$1" = "-x" ]] && set -o xtrace && shift
 
 calling_script="$1"
 
-function available_methods() {
+available_methods() {
     sed -n "s/^function _\(.*\)().*/\1/p" < "$1"
 }
 
-methods=("$(available_methods $calling_script)")
+methods=("$(available_methods "$calling_script")")
 
 function is_available() {
-   [[ "$methods" =~ (^|[[:space:]])"${1:-}"($|[[:space:]]) ]] && return 0 || return 1
+   [[ "${methods[*]}" =~ (^|[[:space:]])"${1:-}"($|[[:space:]]) ]]
 }
 
 # should break when there are no first or second variable and the first variable is an available method,
@@ -30,13 +25,13 @@ function should_continue_variables_loop() {
     return 1  # yes - may create issues if your args has dash as the first character
   elif [[ ! "${2-}" ]]; then
     return 1  # no
-  elif [[ -n "${command-}" ]] && $(is_available "$1") && [[ "${2:0:1}" != '-' ]]; then
+  elif [[ -n "${command-}" ]] && is_available "$1" && [[ "${2:0:1}" != '-' ]]; then
     return 1  # no
   fi
   return 0  # yes
 }
 
-if [[ "${2-}" ]] && $(is_available "$2"); then
+if [[ "${2-}" ]] && is_available "$2"; then
   command="$2"
   shift
 fi
@@ -58,7 +53,7 @@ if [[ $# -gt 1 ]]; then
 	OPTION_KEY=${OPTION_KEY//-/_}
 	#declare as screaming snake case with prefixed underscore
         declare "_${OPTION_KEY^^}=${OPTION/*=/}"
-        if [[ ! "${2-}" ]] || ( [[ "${1:0:1}" == '-' ]] && [[ "$1" =~ '=' ]] && [[ "${2:0:1}" != '-' ]] ); then
+        if [[ ! "${2-}" ]] || { [[ "${1:0:1}" == '-' ]] && [[ "$1" =~ '=' ]] && [[ "${2:0:1}" != '-' ]] ;} then
           break
         fi
       else
@@ -80,14 +75,15 @@ function _help() {  #HELP display this message:\n_PROGRAM help
     sed -n "s/^.*#HELP\\s//p;" < "$2" | sed "s/\\\\n/\n\t/g;s/$/\n/;s/_PROGRAM/$program_name/g"
 }
 
-if [[ -z "${command-}" ]] && $(is_available "${2-}"); then
+if [[ -z "${command-}" ]] && is_available "${2-}"; then
   shift
 fi
 
 #Sources the given script and calls the metod referenced if it's exported, else _help
+# shellcheck source=/dev/null
 source "$calling_script"
 command=${command:-$1}
-if $(is_available "${command:-NoT#AMethod}"); then
+if is_available "${command:-NoT#AMethod}"; then
     _"$command" "${@:2}"
 else
     _help "$calling_script" "$0"
