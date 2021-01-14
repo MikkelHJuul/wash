@@ -10,25 +10,8 @@ available_methods() {
 
 methods=("$(available_methods "$calling_script")")
 
-function is_available() {
+is_available() {
    [[ "${methods[*]}" =~ (^|[[:space:]])"${1:-}"($|[[:space:]]) ]]
-}
-
-# should break when there are no first or second variable and the first variable is an available method,
-# and should continue if either first or second variable starts with dash
-function should_continue_variables_loop() {
-  if [[ ! "${1-}" ]]; then
-    return 1  # no
-  elif [[ "${1:0:1}" == '-' ]] || [[ "${2:0:1}" == '-' ]]; then
-    return 0  # yes - may create issues if your args has dash as the first character
-  elif [[ "${1:0:1}" != '-' ]] && [[ "${2:0:1}" != '-' ]]; then
-    return 1  # yes - may create issues if your args has dash as the first character
-  elif [[ ! "${2-}" ]]; then
-    return 1  # no
-  elif [[ -n "${command-}" ]] && is_available "$1" && [[ "${2:0:1}" != '-' ]]; then
-    return 1  # no
-  fi
-  return 0  # yes
 }
 
 if [[ "${2-}" ]] && is_available "$2"; then
@@ -36,36 +19,35 @@ if [[ "${2-}" ]] && is_available "$2"; then
   shift
 fi
 
-if [[ $# -gt 1 ]]; then
-   # If the current pointer ($1) is a valid command (is an exported method from the source) or if it's the last variable (catch help and non-exported names)
-  while	should_continue_variables_loop "$@" ; do
-    # properties start with at least one dash
-    if [ "${1:0:1}" == '-' ]; then
-      OPTION="${1:1}"
-      # but it may be two
-      if [ "${OPTION:0:1}" == '-' ]; then
-        OPTION="${OPTION:1}"
-      fi
-      #convert to snake_case
-      #handle single variable e.g. -something=other
-      if [[ $OPTION =~ = ]]; then
-        OPTION_KEY=${OPTION/=*/}
-	OPTION_KEY=${OPTION_KEY//-/_}
-	#declare as screaming snake case with prefixed underscore
-        declare "_${OPTION_KEY^^}=${OPTION/*=/}"
-        if [[ ! "${2-}" ]] || { [[ "${1:0:1}" == '-' ]] && [[ "$1" =~ '=' ]] && [[ "${2:0:1}" != '-' ]] ;} then
-          break
-        fi
-      else
-        OPTION=${OPTION//-/_}
-	#declare fallback screaming snake case and the next variable is the value..
-	#flags will simply have the value of the next variable/or the command
-        declare "_${OPTION^^}=${2-}"
-      fi
-    fi
-    shift
-  done
-fi
+option() {
+  echo "_${1//-/_}=$2"
+}
+
+while	(( $# )) ; do
+  case "$1" in
+  --*=*)
+    OPTION_KEY="${1/=*/}"
+    OPTION_KEY="${OPTION_KEY//-/_}"
+    #declare with prefixed underscore
+    declare "$(option "$OPTION_KEY" "${1/*=/}")"
+    ;;
+  --)  # hidden feature should document - must have command before --
+    break  # don't shift as wash calls "${@:2}"
+    ;;
+  --*)
+    declare "$(option "${1:2}" "${2-}")"
+    ;;
+  -*)
+    declare "$(option "${1:1}" "${2-}")"
+    ;;
+  *)
+    { [[ ! "${2-}" ]] || [[ "${2:0:1}" != '-' ]] ;} && break
+    { [[ ! "${command-}" ]] && is_available "$1" ;} && break
+    ;;
+  esac
+  shift
+done
+
 
 # this is the method to print help-message from the given file (and this method) prints the content following the syntax below.
 # will replace indices of _PROGRAM with the programs actual name
@@ -79,10 +61,10 @@ if [[ -z "${command-}" ]] && is_available "${2-}"; then
   shift
 fi
 
-#Sources the given script and calls the metod referenced if it's exported, else _help
+#Sources the given script and calls the method referenced if it's exported, else _help
 # shellcheck source=/dev/null
 source "$calling_script"
-command=${command:-$1}
+command="${command:-$1}"
 if is_available "${command:-NoT#AMethod}"; then
     _"$command" "${@:2}"
 else
