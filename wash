@@ -20,22 +20,20 @@ if [[ "${2-}" ]] && is_available "$2"; then
 fi
 
 option() {
-  echo "_${1//-/_}=$2"
+  opt="$1"
+  [[ "${opt:0:1}" = "-" ]] && opt="${opt:1}"  # support two dashes in front
+  echo "_${opt//-/_}=$2"
 }
 
 while	(( $# )) ; do
   case "$1" in
-  --*=*)
-    OPTION_KEY="${1/=*/}"
-    OPTION_KEY="${OPTION_KEY//-/_}"
+  -*=*)
+    opt_key="${1/=*/}"
     #declare with prefixed underscore
-    declare "$(option "$OPTION_KEY" "${1/*=/}")"
+    declare "$(option "${opt_key:1}" "${1/*=/}")"
     ;;
   --)  # hidden feature should document - must have command before --
     break  # don't shift as wash calls "${@:2}"
-    ;;
-  --*)
-    declare "$(option "${1:2}" "${2-}")"
     ;;
   -*)
     declare "$(option "${1:1}" "${2-}")"

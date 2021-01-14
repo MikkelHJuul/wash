@@ -1,4 +1,5 @@
 #!WASH_LOC -x
+set -eu
 
 function _untrace() {
   set +x

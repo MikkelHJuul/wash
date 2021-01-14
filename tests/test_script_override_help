@@ -1,5 +1,5 @@
 #!/usr/bin/env wash
-
+set -eu
 
 #HELP this help message is not shown
 

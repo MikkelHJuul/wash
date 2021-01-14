@@ -1,28 +1,22 @@
 #!/usr/bin/env wash
+set -eu
 
 #HELP prints the first given input:\n_PROGRAM hello_world <name>
 function _hello_world() {
-   echo "Hello $@"
+   echo "Hello $*"
 }
 
 #HELP prints some variables:\n_PROGRAM [-[-]double-dash <val1>|-[-]flag|-[-]single-dash <val2>] hej_med_vars
 function _hello_with_vars() {
-   echo "_DOUBLE_DASH: $_DOUBLE_DASH"
-   echo "_FLAG: $_FLAG"
-   echo "_SINGLE_DASH: $_SINGLE_DASH"
+   echo "_double_dash: $_double_dash"
+   echo "_flag: $_flag"
+   echo "_single_dash: $_single_dash"
    echo "arg is: $1 and $2"
 }
 
-
-function _unset_nounset_locally() {
-  set +u
-  echo "$NotThere"
-}
-
-
 function _hello_vars_no_args() {
-   echo "_DOUBLE_DASH: $_DOUBLE_DASH"
-   echo "_FLAG: $_FLAG"
-   echo "_SINGLE_DASH: $_SINGLE_DASH"
+   echo "_double_dash: $_double_dash"
+   echo "_flag: $_flag"
+   echo "_single_dash: $_single_dash"
 }
 
