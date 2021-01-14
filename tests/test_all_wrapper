@@ -3,9 +3,8 @@
 set -exuo pipefail
 
 
-PATH="$(dirname $(pwd)):$PATH"
+PATH="$(dirname "$(pwd)"):$PATH"
 export PATH
 
 ./test_basic
-./test_bash_settings
 ./test_wash_trace
