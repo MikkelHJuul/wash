@@ -20,3 +20,7 @@ function _hello_vars_no_args() {
    echo "_single_dash: $_single_dash"
 }
 
+function _print_underscored_vars {
+    echo "${!_*}"
+}
+
