@@ -16,6 +16,8 @@ function _my_func() {
 ```
 is a callable script, with `my_script my_func` calling the method `_my_func` (notice the shebang above).
 
+A script using `wash` must be able to be called using `source`, and isn't expected to have side effects from this. This is a constraint, but it will help the writer to write testable code, as you would design your code to be `source`-able and therefore fully unit-testable. Check [SO](https://stackoverflow.com/questions/1339416/unit-testing-bash-scripts) for more options. 
+
 ### Variables
 The function syntax of your script must give all variables before the command. Or all variables after the command.
 ```bash
