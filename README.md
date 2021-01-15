@@ -23,7 +23,7 @@ The function syntax of your script must give all variables before the command. O
 ```bash
 my_script -my-variable some_value -other-var=john --third-var Ellis --flag my_func
 ```
-will expand variables: `_my_variable=some_value, _other_var=john, _third_Vvar=Ellis, _flag=my_func`
+will expand variables: `_my_variable=some_value, _other_var=john, _third_var=Ellis, _flag=my_func`
 to be freely referenced in you script, as you see the variables are expected to be `kebab-case` and will have dashes replaced by `_` with a prefixed underscore.
 
 The generalised syntax is
@@ -34,6 +34,8 @@ script_name [command <properties> | <properties> command] args...
 note: flags isn't actually a real thing; if you use the syntax `script_name command <properties> args...` and want to put a `flag` as the last parameter set it as `-flag=` or it will consume the first argument. This is an accepted limitation of the script. Please suggest the user the syntax `my_script <command> <flags> <properties> <args>`.
 
 version 0.5 further fixes a bug where `--key=value` or `--flag` as the last parameter would fail.
+
+version 0.7 changed to lower case variables, this is because it should follow the syntax for unexported local variables, this does however trigger [shellcheck 2154](https://github.com/koalaman/shellcheck/wiki/SC2154).
 ### Adding help messages
 your script has a help method. the help method prints any text from your script following the syntax `#HELP`
 
@@ -102,3 +104,6 @@ Bash 4 (4.4?)
 This project is not my invention, I generalised the concepts of [p8952/bocker](https://github.com/p8952/bocker).
 
 This is also the reason for this project to license under the GPL v3 license (condition of reuse of intellectual property). I would have picked UNLICENSE.
+
+## TODO
+- callable without command; `source` with side-effects
