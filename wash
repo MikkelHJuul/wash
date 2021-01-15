@@ -64,6 +64,8 @@ source "$calling_script"
 command="${command:-$1}"
 if is_available "${command:-NoT#AMethod}"; then
     _"$command" "${@:2}"
+elif [ "${!_*} != "_" ]; then
+  exit 0  # side-effects from `source`, variables are set
 else
     _help "$calling_script" "$0"
 fi
