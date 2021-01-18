@@ -1,0 +1,10 @@
+#!/usr/bin/env wash
+
+
+_1() {
+  echo "hacky method"
+}
+
+_method() {
+  echo "real method"
+}

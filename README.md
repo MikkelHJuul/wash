@@ -14,11 +14,15 @@ function _my_func() {
    ... does nothing
 }
 
-# or `function _my_func {` or `_my_func() {`
+# or "function _my_func {" or "_my_func() {"
 ```
 is a callable script, with `my_script my_func` calling the method `_my_func` (notice the shebang above).
 
-A script using `wash` must be able to be called using `source`, and isn't expected to have side effects from this. This is a constraint, but it will help the writer to write testable code, as you would design your code to be `source`-able and therefore fully unit-testable. Check [SO](https://stackoverflow.com/questions/1339416/unit-testing-bash-scripts) for more options. 
+A script using `wash` must be able to be called using `source`, and isn't immediately expected to have side effects from this. This is a constraint, but it will help the writer to write testable code, as you would design your code to be `source`-able and therefore fully unit-testable. Check [SO](https://stackoverflow.com/questions/1339416/unit-testing-bash-scripts) for more options. 
+
+Version 0.7 allows the user to call her/his script without command this way making use of the variables-algorithm. The caller must give at least one variable, or the script will do its thing but print the help message, and exit 127.
+
+Note: You cannot export the method `_`and you should refrain from calling your method something that may be the value of a variable, fx. if you have a command called `_1` then `./script --val 1 method` will call `method` but `./script --val 1 -other 12 method` will not, while `./script method --val 1 -other 12` works.
 
 ### Variables
 The function syntax of your script must give all variables before the command. Or all variables after the command.
@@ -38,6 +42,8 @@ note: flags isn't actually a real thing; if you use the syntax `script_name comm
 version 0.5 further fixes a bug where `--key=value` or `--flag` as the last parameter would fail.
 
 version 0.7 changed to lower case variables, this is because it should follow the syntax for unexported local variables, this does however trigger [shellcheck 2154](https://github.com/koalaman/shellcheck/wiki/SC2154) ([shellcheck ignore](https://github.com/koalaman/shellcheck/wiki/Ignore)).
+
+The script uses `declare` and will exit with state 2 if this action fails. ie. for variables containing forbidden characters, something like: `@#$!+{} ` etc.
 ### Adding help messages
 your script has a help method. the help method prints any text from your script following the syntax `#HELP`
 
