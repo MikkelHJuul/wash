@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -exuo pipefail
 
 function test_out() {
   echo "TEST: $1"
@@ -9,7 +9,7 @@ output_hello="$(./test_script hello_world hello)"
 
 test "Hello hello" = "$output_hello"
 
-echo $(test_out "script single arg is fine")
+test_out "script single arg is fine"
 
 ####################################
 
@@ -17,14 +17,14 @@ output_hello="$(./test_script hello_world)"
 
 test "Hello " = "$output_hello"
 
-echo $(test_out "script no arg is fine")
+test_out "script no arg is fine"
 
 #####################################
 output_hello="$(./test_script hello_world Lilly and Ellis)"
 
 test "Hello Lilly and Ellis" = "$output_hello"
 
-echo $(test_out "script many args is fine")
+test_out "script many args is fine"
 ####################################
 
 #flag has to be the same position
@@ -41,7 +41,7 @@ output_command_opposite="$(./test_script --single-dash=hey -flag --double-dash h
 
 test "$output_command_first" = "$output_command_opposite"
 
-echo $(test_out "multi-args multi properties several call options are fine")
+test_out "multi-args multi properties several call options are fine"
 ####################################
 
 
@@ -49,14 +49,14 @@ output_command_value_with_dash="$(./test_script --single-dash=hey -flag='--doubl
 
 test "$output_command_first" = "$output_command_opposite"
 
-echo $(test_out "wash does not format the value of a \"value\"")
+test_out "wash does not format the value of a \"value\""
 ####################################
 
 #bugfixes for 0.5
 ./test_script hello_vars_no_args -single-dash something --double-dash other-thing --flag
 ./test_script hello_vars_no_args -single-dash something -flag --double-dash=other-thing
 
-echo $(test_out "no-arg calls don't eat properties")
+test_out "no-arg calls don't eat properties"
 ####################################
 help_output="$(./test_script help)"
 
@@ -64,7 +64,7 @@ help_output="$(./test_script help)"
 
 [[ "$help_output" =~ "test_script hello_world <name>" ]] || exit 1
 
-echo $(test_out "help prints help message and it contains content from both files")
+test_out "help prints help message and it contains content from both files"
 
 ####################################
 
@@ -72,9 +72,9 @@ also_help_output="$(./test_script)"
 
 test "$help_output" = "$also_help_output"
 
-echo $(test_out "help is displayed when no arguments are given")
+test_out "help is displayed when no arguments are given"
 ####################################
 
 test "No help here!" = "$(./test_script_override_help)"
 
-echo $(test_out "help method is overriden by method _help in implementing script")
+test_out "help method is overriden by method _help in implementing script"

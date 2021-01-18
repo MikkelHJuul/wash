@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+./test_script not_exported;
+test "$?" = 127
+
+./test_script also_not_exported
+test "$?" = 127
+
+set -e
+./test_script also_exported
+test "$?" = 0
+
+./test_script help
+test "$?" = 0
+
+./test_script --some-var 1  # does nothing
+test "$?" = 0
+if [[ "$(./test_script --some-var 1)" =~ "display this message:" ]]; then
+  exit 1
+fi
+
+./test_script --help
+test "$?" = 0
+
+[[ "$(./test_script --help)" =~ "display this message:" ]]
+
+./test_script --h
+test "$?" = 0
+[[ "$(./test_script --h)" =~ "display this message:" ]]
+

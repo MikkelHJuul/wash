@@ -1,4 +1,5 @@
 #!/usr/bin/env wash
+#!/home/mju/open_source/wash/wash -x
 set -eu
 
 #HELP prints the first given input:\n_PROGRAM hello_world <name>
@@ -7,7 +8,7 @@ function _hello_world() {
 }
 
 #HELP prints some variables:\n_PROGRAM [-[-]double-dash <val1>|-[-]flag|-[-]single-dash <val2>] hej_med_vars
-function _hello_with_vars() {
+function _hello_with_vars() {  # HELP text
    echo "_double_dash: $_double_dash"
    echo "_flag: $_flag"
    echo "_single_dash: $_single_dash"
@@ -24,3 +25,14 @@ function _print_underscored_vars {
     echo "${!_*}"
 }
 
+_also_exported() {
+  echo "hi there"
+}
+
+not_exported() {
+  echo "bye there"
+}
+
+function also_not_exported() {
+  echo "also; bye there"
+}

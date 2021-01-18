@@ -5,7 +5,7 @@
 calling_script="$1"
 
 available_methods() {
-    sed -n "s/^function _\(.*\)\b.*/\1/p" < "$1"
+    sed -n "s/^function _\(.*\)\b.*{.*/\1/p ; s/^_\(.*\)\b.*{.*/\1/p" "$1"
 }
 
 methods=("$(available_methods "$calling_script")")
@@ -25,17 +25,21 @@ option() {
   echo "_${opt//-/_}=$2"
 }
 
+declared_vars=0
+
 while	(( $# )) ; do
   case "$1" in
   -*=*)
     opt_key="${1/=*/}"
     declare "$(option "${opt_key:1}" "${1/*=/}")" || exit 2
+    declared_vars=$(( declared_vars + 1 ))
     ;;
   --)
     break
     ;;
   -*)
     declare "$(option "${1:1}" "${2-}")" || exit 2
+    declared_vars=$(( declared_vars + 1 ))
     ;;
   *)
     { [[ ! "${2-}" ]] || [[ "${2:0:1}" != '-' ]] ;} && break
@@ -54,18 +58,23 @@ function _help {  #HELP display this message:\n_PROGRAM help
     sed -n "s/^.*#HELP\\s//p;" < "$2" | sed "s/\\\\n/\n\t/g;s/$/\n/;s/_PROGRAM/$program_name/g"
 }
 
-if [[ -z "${command-}" ]] && is_available "${2-}"; then
+if [[ -z ${command+is set} ]] && is_available "${2-}" ; then
   shift
 fi
 
-#Sources the given script and calls the method referenced if it's exported, else _help
+#Sources the given script and calls the method referenced if it's exported,
+# it calls the _help method if variables have been set, or _help|_h have been set or the command help has been called
+# default nothing
 # shellcheck source=/dev/null
 source "$calling_script"
-command="${command:-$1}"
+command="${command:-${1-}}"
 if is_available "${command:-NoT#AMethod}"; then
     _"$command" "${@:2}"
-elif [ "${!_*} != "_" ]; then
-  exit 0  # side-effects from `source`, variables are set
-else
-    _help "$calling_script" "$0"
+elif [[ ${_help+is set} ]] || [[ ${_h+is set} ]] || [[ "$*" = *"help"* ]]; then
+  _help "$calling_script" "$0"
+elif ! (( declared_vars )); then
+  _help "$calling_script" "$0"
+  exit 127
 fi
+# the fall-through allow for side-effects from `source $calling_script` if you want to use this with no command,
+# for handling variables to a script

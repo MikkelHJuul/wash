@@ -13,6 +13,8 @@ With `wash` the character `_` is a special character; variables are expanded to 
 function _my_func() {
    ... does nothing
 }
+
+# or `function _my_func {` or `_my_func() {`
 ```
 is a callable script, with `my_script my_func` calling the method `_my_func` (notice the shebang above).
 
@@ -35,7 +37,7 @@ note: flags isn't actually a real thing; if you use the syntax `script_name comm
 
 version 0.5 further fixes a bug where `--key=value` or `--flag` as the last parameter would fail.
 
-version 0.7 changed to lower case variables, this is because it should follow the syntax for unexported local variables, this does however trigger [shellcheck 2154](https://github.com/koalaman/shellcheck/wiki/SC2154).
+version 0.7 changed to lower case variables, this is because it should follow the syntax for unexported local variables, this does however trigger [shellcheck 2154](https://github.com/koalaman/shellcheck/wiki/SC2154) ([shellcheck ignore](https://github.com/koalaman/shellcheck/wiki/Ignore)).
 ### Adding help messages
 your script has a help method. the help method prints any text from your script following the syntax `#HELP`
 
@@ -105,5 +107,3 @@ This project is not my invention, I generalised the concepts of [p8952/bocker](h
 
 This is also the reason for this project to license under the GPL v3 license (condition of reuse of intellectual property). I would have picked UNLICENSE.
 
-## TODO
-- callable without command; `source` with side-effects

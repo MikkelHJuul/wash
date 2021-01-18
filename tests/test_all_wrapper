@@ -8,3 +8,4 @@ export PATH
 
 ./test_basic
 ./test_wash_trace
+./test_export
