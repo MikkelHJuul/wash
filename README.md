@@ -5,14 +5,14 @@ or "`wash` away your boilerplate"
 
 [WASH - Wrapper for bASH](#wash---wrapper-for-bash)
   * [Usage](#usage)
-     * [Exporting your method](#exporting-your-method)
-     * [Variables](#variables)
-     * [Adding help messages](#adding-help-messages)
-        * [Running with trace](#running-with-trace)
+    * [Exporting your method](#exporting-your-method)
+    * [Variables](#variables)
+    * [Adding help messages](#adding-help-messages)
+      * [Running with trace](#running-with-trace)
  * [Installation](#installation)
-             * [install via curl:](#install-via-curl)
-             * [install via docker](#install-via-docker)
-             * [install in docker image](#install-in-docker-image)
+        * [install via curl](#install-via-curl)
+        * [install via docker](#install-via-docker)
+        * [install in docker image](#install-in-docker-image)
      * [Prerequisites](#prerequisites)
  * [Licence notice](#licence-notice)
 
@@ -98,7 +98,7 @@ If you want trace you can, of course, skip tracing the `wash` wrapping code by s
 ## Installation
 it's a `bash` script; install the script `wash` in an executable file named `wash` on your `PATH`. This enables calling `wash` from anywhere, and the shebang syntax (`#!/usr/bin/env wash`).
 
-##### install via curl:
+##### install via curl
 ```bash
 curl https://raw.githubusercontent.com/MikkelHJuul/wash/main/wash > /usr/bin/wash
 chmod +x /usr/bin/wash
