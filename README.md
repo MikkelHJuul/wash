@@ -3,20 +3,6 @@ or "`wash` away your boilerplate"
 
 `wash` is a `bash` script that you can call with a bash file (or from your file via shebang). `wash` handles command invocation, variables and help-messages.
 
-[WASH - Wrapper for bASH](#wash---wrapper-for-bash)
-  * [Usage](#usage)
-    * [Exporting your method](#exporting-your-method)
-    * [Variables](#variables)
-    * [Adding help messages](#adding-help-messages)
-      * [Running with trace](#running-with-trace)
-  * [Installation](#installation)
-        * [install via curl](#install-via-curl)
-        * [install via docker](#install-via-docker)
-        * [install in docker image](#install-in-docker-image)
-    * [Prerequisites](#prerequisites)
-  * [Licence notice](#licence-notice)
-
-
 ## Usage
 With `wash` the character `_` is a special character; variables are expanded to properties that start with `_` and methods are exported when they start with `_`, this is simply a gimmick to make the script work and the properties clearly noticable.
 ### Exporting your method
