@@ -9,12 +9,12 @@ or "`wash` away your boilerplate"
     * [Variables](#variables)
     * [Adding help messages](#adding-help-messages)
       * [Running with trace](#running-with-trace)
- * [Installation](#installation)
+  * [Installation](#installation)
         * [install via curl](#install-via-curl)
         * [install via docker](#install-via-docker)
         * [install in docker image](#install-in-docker-image)
-     * [Prerequisites](#prerequisites)
- * [Licence notice](#licence-notice)
+    * [Prerequisites](#prerequisites)
+  * [Licence notice](#licence-notice)
 
 
 ## Usage
