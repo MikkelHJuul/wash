@@ -1,4 +1,4 @@
-# WASH - Wrapper for bASH
+# WASH - Wrapper for bash
 or "`wash` away your boilerplate"
 
 `wash` is a `bash` script that you can call with a bash file (or from your file via shebang). `wash` handles command invocation, variables and help-messages.
@@ -53,7 +53,7 @@ to sum it all up; given!
 
 #HELP my function does almost nothing:\n_PROGRAM -my-variable <value> -other-var=<value> -third-var <value> -flag my_func
 function _my_func() {
-   echo "$_my_variable, $_other_var, $_third_vat, $_flag"
+   echo "$_my_variable, $_other_var, $_third_var, $_flag"
    echo "Hello $@"  # these are all the passed arguments
 }
 ```
